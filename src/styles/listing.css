@@ -1,0 +1,32 @@
+.listing {
+    border: 3px solid white;
+    height: 240px;
+    width: 220px;
+}
+
+.image {
+    height: 140px;
+    width: 214px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.FavButton {
+    height: 20px;
+    width: 50px;
+    line-height: 15px;
+}
+
+.addToCart {
+    height: 20px;
+    width: 140px;
+    line-height: 15px;
+}
+
+.list {
+    display: flex;
+    justify-content: space-evenly;
+}
