@@ -4,7 +4,7 @@ import '../styles/listing.css'
 function Listing({ listing, inCart, deleteFromCart, userId }) {
     const {type, price, maker, dateOfListing, favorites} = listing;
     const [images, setImages] = useState([])
-    const [test, setTest] = useState(false)
+    const [fav, setFav] = useState(false)
 
     const addToCart = () => {
       //change 1 to userId once captured
@@ -24,6 +24,7 @@ function Listing({ listing, inCart, deleteFromCart, userId }) {
     }
 
     const addToFavs = () => {
+      if(userId){
       fetch(
         'https://localhost:7057/api/Favorite/'+ userId + '/' + listing.id,
         {
@@ -35,12 +36,28 @@ function Listing({ listing, inCart, deleteFromCart, userId }) {
           body:""
         },
       )
+      setFav(prev => !prev);
+      }
+    }
+
+    const deleteFromFavs = () => {
+      fetch(
+        'https://localhost:7057/api/Favorite/DeleteFromFavorite/'+ userId + '/' + listing.id,
+        {
+          method: 'DELETE',
+          headers: {
+            'Access-Control-Allow-Origin': 'https://localhost:7283',
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      setFav(prev => !prev);
     }
 
     useEffect(() => {
-      console.log("in useeffect")
+      if(userId && listing.id){
         fetch(
-            'https://localhost:7057/api/Image/' + listing.id,
+          'https://localhost:7057/api/Favorite/CheckIfFav/' + userId + '/' + listing.id,
             {
               method: 'GET',
               headers: {
@@ -51,8 +68,13 @@ function Listing({ listing, inCart, deleteFromCart, userId }) {
           )
             .then((res) => res.json())
             .then((r) => {
-              setImages(r);
+              setFav(r);
             });  
+          }
+    }, [])
+
+    useEffect(() => {
+      console.log("in new use effect")
     }, [])
 
     console.log("listing user id is " + userId)
@@ -73,7 +95,8 @@ function Listing({ listing, inCart, deleteFromCart, userId }) {
         <div className="buttons">
           {!inCart ? <button onClick={() => addToCart()} className="addToCart">Add To Cart</button>
           : <button onClick={() => deleteFromCart(listing.id, userId)} className="addToCart">Delete From Cart</button>}
-          <button onClick={() => addToFavs()} className="FavButton">Fav</button>
+          {!fav ? <button onClick={() => addToFavs()} className="FavButton">Fav</button> : 
+          <button onClick={() => deleteFromFavs()} className="FavButton">Delete From Fav</button>}
         </div>
     </div>
   )
