@@ -7,9 +7,21 @@ export default function UploadListing({userId}) {
   const [address, setAddress] = useState('');
   const [price, setPrice] = useState('');
   const [images, setImages] = useState([]);
+
+  const [electric, setElectric] = useState(false);
+  const [mpg, setMpg] = useState('');
+  const [crashes, setCrashes] = useState('');
+  const [miles, setMiles] = useState('');
+  const [warranty, setWarranty] = useState(false);
+
   const currentImages = [];
   
   const dictionary = {
+    "electric" : setElectric,
+    "mpg" : setMpg,
+    "crashes" : setCrashes,
+    "miles" : setMiles,
+    "warranty" : setWarranty,
     "maker" : setMaker,
     "type" : setType,
     "address" : setAddress,
@@ -32,24 +44,34 @@ export default function UploadListing({userId}) {
   return fetch('https://localhost:7057/api/Listing/NewListing', fetchOptions)
   }
 
-  const sendImageRequest = (newListing) => {
-    const fetchOptions = {
-      method: 'POST',
-      headers: {
-          'Access-Control-Allow-Origin': 'https://localhost:7057',
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newListing)
-  }
-  return fetch('https://localhost:7057/api/Image', fetchOptions)
-  }
+  // const sendFactsRequest = (newFacts) => {
+  //   const fetchOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //         'Access-Control-Allow-Origin': 'https://localhost:7057',
+  //         'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(newFacts)
+  // }
+  // return fetch('https://localhost:7057/api/Fact', fetchOptions)
+  // }
+
+  // const sendImageRequest = (newListing) => {
+  //   const fetchOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //         'Access-Control-Allow-Origin': 'https://localhost:7057',
+  //         'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(newListing)
+  // }
+  // return fetch('https://localhost:7057/api/Image', fetchOptions)
+  // }
 
 
 
 
-  const submit = (e) => {
-    e.preventDefault();
-    console.log("in on submit")
+   const submit = () => {
     const dataToSend = {
       "userId" : userId,
       "type" : type,
@@ -59,12 +81,16 @@ export default function UploadListing({userId}) {
       "dateOfListing": Date.now,
       "favorites": 0,
       "purchased": false,
-      "inCart": false
+      "inCart": false,
+      "electric" : electric ? true : false,
+        "listingId" : 0,
+        "mpg" : mpg,
+        "crashes" : crashes,
+        "miles" : miles,
+        "warranty" : warranty ? true : false
     } 
-      sendRequest(dataToSend);
-      console.log(currentImages)
-      setImages(currentImages);
-      console.log(images)
+     sendRequest(dataToSend);
+      //setImages(currentImages);
 
     //   let form = new FormData();
     //   for (let index = 0; index < e.target.files; index++) {
@@ -72,24 +98,34 @@ export default function UploadListing({userId}) {
     //     form.append('file', element);
     // }
 
-      for(const image of currentImages){
-       // form.append('img', image)
-        const imageToSend = {
-          "listingId" : 1008,
-          "displayOrder": 1,
-          "img" : image
-        }
-        sendImageRequest(imageToSend);
-      }
+      // for(const image of currentImages){
+      //  // form.append('img', image)
+      //   const imageToSend = {
+      //     "listingId" : 1008,
+      //     "displayOrder": 1,
+      //     "img" : image
+      //   }
+      //   sendImageRequest(imageToSend);
+
+      // const factsToSend = {
+      //   "electric" : electric ? true : false,
+      //   "listingId" : listingId,
+      //   "mpg" : mpg,
+      //   "crashes" : crashes,
+      //   "miles" : miles,
+      //   "warranty" : warranty ? true : false
+      // }
+      //sendFactsRequest(factsToSend);
     }
+    
   
-  const handleUploadFiles = files => {
-    const uploaded = [...images]
-    files.some((file) => {
-      uploaded.push(file);
-    })
-    setImages(uploaded);
-  }
+  // const handleUploadFiles = files => {
+  //   const uploaded = [...images]
+  //   files.some((file) => {
+  //     uploaded.push(file);
+  //   })
+  //   setImages(uploaded);
+  // }
 
   const handlePicture = (e) => {
     console.log("handlepic")
@@ -131,9 +167,33 @@ export default function UploadListing({userId}) {
           <fieldset className="sellField">
             <input className="sellinput" id="price" type="number" placeholder="Selling Price" onChange={handleChange} value={price} required />
           </fieldset>
+          
+
+          
+          <fieldset className="sellField">
+            <input className="sellinput" id="mpg" type="number" placeholder="MPG" onChange={handleChange} value={mpg} required />
+          </fieldset>
+          <fieldset className="sellField">
+            <input className="sellinput" id="crashes" type="number" placeholder="Number of Crashes" onChange={handleChange} value={crashes} required />
+          </fieldset>
+          <fieldset className="sellField">
+            <input className="sellinput" id="miles" type="number" placeholder="Vehicle Miles" onChange={handleChange} value={miles} required />
+          </fieldset>
+          <fieldset className="sellField">
+          <h5>Is your car still under warranty?</h5>
+            <p><input name="warrantCondition" className="sellinput" id="warranty" type="radio" onChange={handleChange} value={true} required/>true</p>
+            <p><input name="warrantCondition" className="sellinput" id="warranty" type="radio" onChange={handleChange} value={false} />false</p>
+          </fieldset>
+          <fieldset className="sellField">
+            <h5>Is your car electric?</h5>
+            <p><input name="radioCondition" className="sellinput" id="electric" type="radio" onChange={handleChange} value={true} required/>true</p>
+            <p><input name="radioCondition" className="sellinput" id="electric" type="radio" onChange={handleChange} value={false} />false</p>
+          </fieldset>
+
           <fieldset className="sellField">
             <input className="sellinput" type="file" multiple onChange={handlePicture} required />
           </fieldset>
+
           <button type="submit">Submit your listing!</button>
         </form>
       </div>
