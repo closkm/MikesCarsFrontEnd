@@ -30,3 +30,15 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.singleImage {
+    height: 300px;
+    width: 580px;
+}
+
+.specificListing {
+    display: flex;
+    justify-content: center;
+}
+
+

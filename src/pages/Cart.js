@@ -40,9 +40,31 @@ export default function Cart({userId}) {
           }
     }, [test])
 
+    const submit = () => {
+      for(const listing of listings){
+        fetch(
+          'https://localhost:7057/api/Listing/Purchased/'+ userId + '/' + listing.id,
+          {
+            method: 'PUT',
+            headers: {
+              'Access-Control-Allow-Origin': 'https://localhost:7283',
+              'Content-Type': 'application/json',
+            },
+            body:""
+          },
+        )
+      }
+      setTest(prev => !prev);
+    }
+
   return (
     <div>
-        {listings.length > 0 ? <ListingList inCart={true} listings={listings} deleteFromCart={deleteFromCart} userId={userId}/> : <h3>Add Cars to your Cart</h3>}
+        {listings.length > 0 ? 
+        <>
+        <ListingList inCart={true} listings={listings} deleteFromCart={deleteFromCart} userId={userId}/> 
+          <button onClick={() => submit()}>Checkout</button>
+        </>
+        : <h3>Add Cars to your Cart</h3>}
     </div>
   )
 }
