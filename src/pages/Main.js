@@ -41,7 +41,7 @@ useEffect(() => {
       setFavorites(r);
     });
   }
-}, [])
+}, [fav])
 
 const handleFav = () => {
   setFav(prev => !prev);

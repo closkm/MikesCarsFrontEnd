@@ -7,6 +7,7 @@ import BasicExample from '../Navigation/Navbar';
 import "bootstrap/dist/css/bootstrap.min.css";
 import UploadListing from '../pages/UploadListing';
 import Cart from '../pages/Cart'
+import SpecificListing from '../components/SpecificListing';
 
 export default function Routes({ user }) {
   //Check ddoes firebaseId live in backend? if not createa a user with it, no need to ask for info, just disect from user obj
@@ -85,6 +86,7 @@ const submit = () => {
       <BasicExample />
       <Switch>
         <Route exact path="/cart" component={() => <Cart userId={userId}/>} />
+        <Route exact path="/listing" component={() => <SpecificListing />} />
         <Route exact path="/main" component={() => <Main userId={userId}/>} />
         <Route exact path="/upload" component={() => <UploadListing userId={userId}/>} />
         <Route exact path="/" component={() => <Authenticated user={user} />} />
