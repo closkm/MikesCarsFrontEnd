@@ -9,9 +9,12 @@ function Listing({ listing, inCart, deleteFromCart, userId }) {
 
     const history = useHistory();
     const navigateToListing = () => {
+      console.log("in nav");
+      console.log(userId)
       history.push({
         pathname: '/listing',
-        state : {listing : listing}
+        state : {'listing' : listing, 
+                'userId' : userId}
     })
     }
 
@@ -82,9 +85,24 @@ function Listing({ listing, inCart, deleteFromCart, userId }) {
             });  
           }
     }, [])
-
+    
     useEffect(() => {
-      console.log("in new use effect")
+      if(userId && listing.id){
+        fetch(
+          'https://localhost:7057/api/Image/' + listing.id,
+            {
+              method: 'GET',
+              headers: {
+                'Access-Control-Allow-Origin': 'https://localhost:7057',
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+            .then((res) => res.json())
+            .then((r) => {
+              setImages(r);
+            });  
+          }
     }, [])
 
     console.log("listing user id is " + userId)
