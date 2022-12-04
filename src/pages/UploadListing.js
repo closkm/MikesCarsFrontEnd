@@ -1,12 +1,17 @@
 import { preventOverflow } from '@popperjs/core';
 import React, { useState } from 'react'
+import {firebaseStorage} from '../utils/client';
+import { storage, ref } from "firebase/storage";
 
 export default function UploadListing({userId}) {
   const [maker, setMaker] = useState('Tesla');
   const [type, setType] = useState('');
   const [address, setAddress] = useState('');
   const [price, setPrice] = useState('');
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState('');
+  const [images1, setImages1] = useState('')
+  const [images2, setImages2] = useState('')
+  const [images3, setImages3] = useState('')
 
   const [electric, setElectric] = useState(false);
   const [mpg, setMpg] = useState('');
@@ -14,7 +19,6 @@ export default function UploadListing({userId}) {
   const [miles, setMiles] = useState('');
   const [warranty, setWarranty] = useState(false);
 
-  const currentImages = [];
   
   const dictionary = {
     "electric" : setElectric,
@@ -25,7 +29,10 @@ export default function UploadListing({userId}) {
     "maker" : setMaker,
     "type" : setType,
     "address" : setAddress,
-    "price" : setPrice
+    "price" : setPrice,
+    "images1" : setImages1,
+    "images2" : setImages2, 
+    "images3" : setImages3
   } 
 
   const handleChange = (e) => {
@@ -44,34 +51,7 @@ export default function UploadListing({userId}) {
   return fetch('https://localhost:7057/api/Listing/NewListing', fetchOptions)
   }
 
-  // const sendFactsRequest = (newFacts) => {
-  //   const fetchOptions = {
-  //     method: 'POST',
-  //     headers: {
-  //         'Access-Control-Allow-Origin': 'https://localhost:7057',
-  //         'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(newFacts)
-  // }
-  // return fetch('https://localhost:7057/api/Fact', fetchOptions)
-  // }
-
-  // const sendImageRequest = (newListing) => {
-  //   const fetchOptions = {
-  //     method: 'POST',
-  //     headers: {
-  //         'Access-Control-Allow-Origin': 'https://localhost:7057',
-  //         'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(newListing)
-  // }
-  // return fetch('https://localhost:7057/api/Image', fetchOptions)
-  // }
-
-
-
-
-   const submit = () => {
+   const submit = (e) => {
     const dataToSend = {
       "userId" : userId,
       "type" : type,
@@ -87,60 +67,11 @@ export default function UploadListing({userId}) {
         "mpg" : mpg,
         "crashes" : crashes,
         "miles" : miles,
-        "warranty" : warranty ? true : false
+        "warranty" : warranty ? true : false,
+        "images" : [images1,images2,images3]
     } 
      sendRequest(dataToSend);
-      //setImages(currentImages);
-
-    //   let form = new FormData();
-    //   for (let index = 0; index < e.target.files; index++) {
-    //     let element = e.target.files[index];
-    //     form.append('file', element);
-    // }
-
-      // for(const image of currentImages){
-      //  // form.append('img', image)
-      //   const imageToSend = {
-      //     "listingId" : 1008,
-      //     "displayOrder": 1,
-      //     "img" : image
-      //   }
-      //   sendImageRequest(imageToSend);
-
-      // const factsToSend = {
-      //   "electric" : electric ? true : false,
-      //   "listingId" : listingId,
-      //   "mpg" : mpg,
-      //   "crashes" : crashes,
-      //   "miles" : miles,
-      //   "warranty" : warranty ? true : false
-      // }
-      //sendFactsRequest(factsToSend);
     }
-    
-  
-  // const handleUploadFiles = files => {
-  //   const uploaded = [...images]
-  //   files.some((file) => {
-  //     uploaded.push(file);
-  //   })
-  //   setImages(uploaded);
-  // }
-
-  const handlePicture = (e) => {
-    console.log("handlepic")
-
-    //const chosenImages = Array.prototype.slice.call(e.target.files)
-    //currentImages = [...images];
-    currentImages.push(e.target.files);
-    console.log(currentImages)
-    
-   // console.log("chosenfiels :  ")
-   // console.log(chosenImages)
-    //handleUploadFiles(chosenImages)
-    //console.log("images")
-    //console.log(images)
-  }
 
   return (
     <div>
@@ -191,7 +122,9 @@ export default function UploadListing({userId}) {
           </fieldset>
 
           <fieldset className="sellField">
-            <input className="sellinput" type="file" multiple onChange={handlePicture} required />
+            <input id="images1" className="sellinput" type="text" onChange={handleChange} value={images1} required />
+            <input id="images2" className="sellinput" type="text" onChange={handleChange} value={images2} required />
+            <input id="images3" className="sellinput" type="text" onChange={handleChange} value={images3} required />
           </fieldset>
 
           <button type="submit">Submit your listing!</button>
