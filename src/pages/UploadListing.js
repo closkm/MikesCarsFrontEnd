@@ -51,7 +51,7 @@ export default function UploadListing({userId}) {
   return fetch('https://localhost:7057/api/Listing/NewListing', fetchOptions)
   }
 
-   const submit = (e) => {
+   const submit = () => {
     const dataToSend = {
       "userId" : userId,
       "type" : type,
